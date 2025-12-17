@@ -1,0 +1,38 @@
+service: demo-cloudformation-opa
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  region: us-east-1
+
+resources:
+  Resources:
+
+    DemoEC2Instance:
+      Type: AWS::EC2::Instance
+      Properties:
+        InstanceType: t3.micro
+        ImageId: ami-0c02fb55956c7d316 # Amazon Linux (example)
+
+    DemoS3Bucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: demo-opa-compliant-bucket-12345
+        PublicAccessBlockConfiguration:
+          BlockPublicAcls: true
+          BlockPublicPolicy: true
+          IgnorePublicAcls: true
+          RestrictPublicBuckets: true
+
+custom:
+  scripts:
+    hooks:
+      package:finalize: >
+        current_pwd=$(pwd);
+        root_path=$(echo "$current_pwd" | sed "s|/cloudformation-opa/services/.*||");
+        bash "$root_path/cloudformation-opa/policy/validate-governance.sh"
+        ".serverless/cloudformation-template-update-stack.json"
+
+plugins:
+  - serverless-plugin-scripts

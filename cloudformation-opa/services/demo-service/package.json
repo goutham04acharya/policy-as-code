@@ -1,0 +1,9 @@
+{
+    "name": "demo-cloudformation-opa",
+    "version": "1.0.0",
+    "private": true,
+    "devDependencies": {
+      "serverless-plugin-scripts": "^1.0.0"
+    }
+  }
+  

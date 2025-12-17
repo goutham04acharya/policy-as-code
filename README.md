@@ -29,3 +29,36 @@ This repository provides a complete Policy-as-Code implementation using OPA, inc
 ### Policies Enforced
 - EC2 instance types: Only `t3.micro`, `t3.small`, `t2.micro`, `t2.small` allowed
 - S3 buckets: Must have public access blocked
+
+## CLOUDFORMATION
+
+### How to Run
+
+1. **Navigate to Demo Service**
+   ```bash
+   cd cloudformation-opa/services/demo-service
+   ```
+
+2. **Install Dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Configure Scenario**
+   - For **PASS**: Keep default configuration in `serverless.yml`
+   - For **FAIL**: Modify `serverless.yml`:
+     - Change EC2 instance type to `m5.large`
+     - Remove `PublicAccessBlockConfiguration` block from S3 bucket
+
+4. **Execute Policy Validation**
+   ```bash
+   sls package
+   ```
+
+### Expected Results
+- **PASS**: `✅ PASSED - Governance checks successful`
+- **FAIL**: `❌ FAILED - Governance violations detected` with specific violations listed
+
+### Policies Enforced
+- EC2 instance types: Only `t2.micro`, `t2.small`, `t3.micro`, `t3.small` allowed
+- S3 buckets: Must have public access blocked
