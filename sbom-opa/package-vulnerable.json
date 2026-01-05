@@ -1,0 +1,22 @@
+{
+  "name": "demo-sbom-app",
+  "version": "1.0.0",
+  "description": "Demo application for SBOM policy-as-code testing",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "generate-sbom": "npx @cyclonedx/cyclonedx-npm --output-file reports/sbom/sbom.json --output-format JSON --spec-version 1.6",
+    "scan-vulnerabilities": "grype sbom:reports/sbom/sbom.json --add-cpes-if-none -o json > reports/sbom/vulnerability-report.json",
+    "validate-policy": "opa exec --decision sbom/security/result --bundle policy/ reports/sbom/vulnerability-report.json"
+  },
+  "dependencies": {
+    "express": "4.18.2",
+    "axios": "0.21.1"
+  },
+  "devDependencies": {
+    "@cyclonedx/cyclonedx-npm": "^1.19.3"
+  },
+  "keywords": ["sbom", "security", "policy-as-code"],
+  "author": "Demo",
+  "license": "MIT"
+}
